@@ -1,16 +1,19 @@
 package com.kenny.shirodemo;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.servlet.Filter;
+
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.apache.shiro.mgt.SecurityManager;
+import com.kenny.shirodemo.other.MyRealm;
 
 @SpringBootApplication
 public class ShiroDemoApplication {
@@ -44,12 +47,14 @@ public class ShiroDemoApplication {
 		return shiroFilterFactoryBean;
 	}
 
+	/**
+	 * 授权和认证的 类
+	 * @return
+	 */
 	@Bean
-	public MyShiroRealm myShiroRealm(){
-		MyShiroRealm myShiroRealm = new MyShiroRealm();
-		return myShiroRealm;
+	public MyRealm myShiroRealm(){
+		return new MyRealm();
 	}
-
 
 	@Bean
 	public SecurityManager securityManager(){
@@ -58,10 +63,6 @@ public class ShiroDemoApplication {
 		return securityManager;
 	}
 	
-	@Bean
-	public HibernateTemplate hibernateTemplate() {
-		return new HibernateTemplate();
-	}
-
+	
 }
 

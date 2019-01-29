@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.transaction.Transactional;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "username" }))
@@ -65,4 +66,11 @@ public class UserInfo implements Serializable{
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+
+	@Override
+	@Transactional
+	public String toString() {
+		return "UserInfo [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles + "]";
+	}
+	
 }
