@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>vue test</title>
+		<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.0.0/css/bootstrap.min.css" 
+		crossorigin="anonymous">
+		<!-- <link rel="css/layui.all.css" /> -->
+		<style>
+			.tc {text-align: center;}
+			ol {margin:50px 200px;}
+			.code {padding: 20px ;  margin: 15px 0;}
+			.nav {background: #D7D6D6; width: 100%; height: 200px;text-align: center;
+					color: #66AA66; padding-right: 20px;  text-shadow: 6px 6px 12px;}
+			.nav h1 {font-size: 70px; font-weight: bolder;}
+			.mb15 {margin-bottom: 15px;}
+		</style>
+		<script src="https://cdn.bootcss.com/vue/2.6.6/vue.common.dev.js"></script>
+	</head>
+	<body>
+		<nav class="layui-row">
+			<div class="nav">
+				<h1>VUE DEMO</h1>
+			</div>
+		</nav>
+		<div>
+			<ol>
+				<h3><li>数据双向绑定</li></h3>
+				<p>data1.text == app1.text<p>
+				<div id="app1">
+					<button type="button" class="btn" v-on:click="changeData">改变data.text</button>
+					<button type="button" class="btn" v-on:click="changeApp1">改变app1.text</button>
+					<ul>
+						<p><blockquote>
+							<code>{{ text }}</code>
+						</blockquote></p>
+						<li>v-once指令渲染的值, 不会变</li>
+						<p><blockquote>
+							<code v-once="">{{ text }}</code>
+						</blockquote></p>
+					</ul>
+				</div>
+				<hr>
+				<script>
+					const hello = "hello "
+					var data1 = {text: hello}
+					var app1 = new Vue({
+						el: '#app1',
+						data: data1,
+						methods: {
+							changeData: () => data1.text += hello,
+							changeApp1: () => app1.text += hello
+						}
+					})
+				</script>
+				
+					
+				
+				
+				<h3><li>标签属性值用"v-bind:prop=val"绑定</li></h3>
+				<div id="app2">
+					<div class="row mb15">
+						<div class="col-md-3">
+							<input id="app2-color" class="form-control" type="text" v-bind:value="color" />
+						</div>
+						<div class="col-md-1">
+							<button type="button" class="btn" v-on:click="changeColor">确定改颜色</button>
+						</div>
+					</div>
+					<p v-bind:style="style">今天是什么颜色的心情</p>
+					
+					<ul>
+						<li><p>疑问: 这种需求应该如何做? (v-bind:prop="value1 + value2"可以吗)</p></li>
+						<blockquote>
+							<code>&lt;p v-bind:style="'color: ' + 'color'"&gt;</code>
+						</blockquote>
+					
+						<li><p>回答: 可以的! 字符串加单引号, 变量不加: v-bind:prop="'string' + value", <b>但是变量不可以是用户自定义的全局变量</b></p></li>
+						<p v-bind:style="'color:' + color">今天是什么颜色的心情</p>
+					</ul>
+				</div>
+				<hr>
+				<script type="text/javascript">
+					var data2 = {}, color = "#DD0000";
+					data2.color = color;
+					data2.style = "color:" + color;
+					var app2 = new Vue({
+						el: '#app2',
+						data: data2,
+						methods: {
+							changeColor: () => { 
+								// 注意动态获取dom的值, 因为input值改变但是dom里面value="xxx"的值不会变的,
+								// 所以app2.color原本没有改变, 方法里要把app2.color改为动态获取的值
+								app2.style = "color:" + (app2.color = document.getElementById('app2-color').value)
+							}
+						}
+					})
+				</script>
+				
+				<h3><li>一些标签的含义</li></h3>
+				<div id="app3">
+					<ul>
+						<li>
+							<p>v-on:event 表示监听</p>
+							<blockquote>
+								<code>&lt;button v:on-click="func" /&gt;</code>
+							</blockquote>
+						</li>
+						<li>
+							<p>v-bind:prop="value" 表示给标签属性赋值</p>
+							<blockquote>
+								<code>&lt;div v-bind:id="'test-' + var"&gt;</code>
+							</blockquote>
+						</li>
+						<li>
+							<p>v-if="bool": 表示判断</p>
+							<blockquote>
+								<code>&lt;p v-if="bool"&gt;当bool为true时可见&lt;/p&gt;</code>
+							</blockquote>
+						</li>
+						
+						
+						v-once, v-for, v-model
+					</ul>
+				</div>
+				<hr>
+				<script>
+				</script>
+				
+				
+				
+				<h3><li>动态渲染vue标签的属性名, 用中括号:[] </li></h3>
+				<div id="app4">
+					<ul>
+						<li>
+							<p>"v-on:[var]" </p>
+							<blockquote>
+								<code>当var = 'click'时, 表示"v-on:click"</code>
+							</blockquote>
+						</li>
+						<li>
+							<p>中括号[]里面不能有引号和空格, 所以这句话是错误的: "v-bind:['data-' + var]",  </p>
+							<blockquote>
+								<code>但是可以是"v-bind:[var1+var2]", 即中括号[]没有引号和空格</code>
+							</blockquote>
+						</li>
+					</ul>
+				</div>
+				<hr>
+				<script>
+				</script>
+				
+				
+				<h3><li>修饰符"."的作用(太难以后再看)</li></h3>
+				<div id="app5">
+					<ul>
+						<li>
+							<p>v-on:submit.prevent的意思是对触发的事件调用event.preventDefault() ....</p>
+							<blockquote>
+								<code>&lt;form v-on:submit.prevent="onSubmit"&gt;...&lt;/form&gt;</code>
+							</blockquote>
+						</li>
+						<li>
+							<p>中括号[]里面不能有引号和空格, 所以这句话是错误的: "v-bind:['data-' + var]",  </p>
+							<blockquote>
+								<code>但是可以是"v-bind:[var1+var2]", 即中括号[]没有引号和空格</code>
+							</blockquote>
+						</li>
+					</ul>
+				</div>
+				<hr>
+				<script>
+				</script>
+				
+				
+				
+				<h3><li>v-bind和v-on的缩写, 以后再看</li></h3>
+				<div id="app6">
+					<ul>
+						<li>
+							<p>v-on:click="func" => @click</p>
+							<blockquote>
+								<code>&lt;button @click="func" /&gt;</code>
+							</blockquote>
+						</li>
+						<li>
+							<p>v-bind:src="xxxx" => :src</p>
+							<blockquote>
+								<code>&lt;img :src="xxxx" /&gt;</code>
+							</blockquote>
+						</li>
+					</ul>
+				</div>
+				<hr>
+				<script>
+				</script>
+				
+				
+				<h3><li>动态计算: computed(计算性属性): 可根据var1动态计算var2的值</li></h3>
+				<div id="app7">
+					<div class="row">
+						<div class="col-md-3 mb15">
+							<input class="form-control" type="text" v-bind:value="var1" v-on:change="change" />
+						</div>
+					</div>
+					<p>变量var1的值为: {{ var1 }}</p>
+					<p>var1变, var2就变: {{ var2 }}</p>
+					<blockquote>
+						<code>new Vue({
+		<br>&nbsp;&nbsp;	data: {var1:'xxxx'},
+		<br>&nbsp;&nbsp;	computed: {
+								var2: function() {
+									return this.var1.split('').reverse().join('')
+								}
+							}
+		<br>			})</code>
+					</blockquote>
+					<ul>
+						<b><li>note: computed(计算型属性)的值是有缓存的, 即如果他所依赖的变量没有发生变化, computed里面的函数不会重复执行, 而是直接返回缓存的结果</li></b>
+					</ul>
+				</div>
+				<hr>
+				<script>
+					var data7 = { var1: "ABCDE" }
+					var app7 = new Vue({
+						el: "#app7",
+						data: data7,
+						methods: {
+							change: (e) => app7.var1 = e.target.value
+						},
+						computed: {
+							var2: () => {
+								// app7.var1.split('').reverse().join(''), 居然会报错, data7就不会, 用this也不会, 奇怪
+								// 应该是还没初始化完这个Object, 要初始化完成后才赋值给"app7", computed是在初始化过程中调用的, 所以app7还是为undefined的
+								return data7.var1.split('').reverse().join('')
+							}
+						}
+					})
+				</script>
+				
+				
+				<h3><li>动态属性: watch(侦听性属性) </li></h3>
+				<div id="app8">
+					<p>监听一个变量的改变</p>
+					<p>感觉有了上面的computed(计算型属性), 这个就基本没用了, 因为computed(计算型属性)同时监听多个, 而watch只能监听一个变量</p>
+					<blockquote>
+						<code>
+							new Vue({
+			<br>&nbsp;&nbsp;	data: {
+									var1: 'world',
+									var2: 'hello world'
+								},
+			<br>&nbsp;&nbsp;	watch: {
+									var1: function(x) {
+										var2 = "hello " + x;
+									}
+								}	
+					</br>	})
+						</code>
+					</blockquote>
+					<ul><b>
+						<li>note: computed(计算性属性)如果自身的值改变, 想要也改变被依赖的值, 可以添加setter方法</li>
+					</b></ul>
+				</div>
+				<hr>
+				<script>
+				</script>
+				
+				
+				
+				<h3><li>axios发起网络请求</li></h3>
+				<div id="app9">
+					<p>Vue推荐的网络交互工具包, 好像在spread.js, 本身不自带的</p>
+					<blockquote><code>
+						axios.get(url)
+<br>&nbsp;&nbsp;			.then(successFunc)
+<br>&nbsp;&nbsp;			.catch(errorFunc)
+					</code></blockquote>
+				</div>
+				<hr>
+				<script>
+				</script>
+			</ol>
+		</div>
+		
+	</body>
+	
+	
+	
+</html>
