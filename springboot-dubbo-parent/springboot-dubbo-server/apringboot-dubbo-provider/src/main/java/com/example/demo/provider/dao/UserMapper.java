@@ -14,6 +14,7 @@ import com.example.demo.api.model.User;
  * 修改备注：
  * 修改时间：
  */
+//@Repository 不用添加
 public interface UserMapper {
 
     User findOneById(Integer id);

@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserMapper userMapper; // 这里idea报红色是因为没有用@Component注解mapper实现类的方式,不用理会
 
     @Override
     public User findOneById(Integer id) {
